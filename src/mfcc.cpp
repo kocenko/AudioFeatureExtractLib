@@ -32,9 +32,11 @@ void MFCC::initialize_filterbank(void)
         
     filter_banks.reserve(constants::mel_banks_num * fft_bins_num);
     
-    for (int filter_idx = 1; filter_idx <= constants::mel_banks_num; filter_idx++) {
+    for (int filter_idx = 1; filter_idx <= constants::mel_banks_num; filter_idx++)
+    {
         double_vector single_filter;
-        for (int bin = 0; bin < fft_bins_num; bin++) {
+        for (int bin = 0; bin < fft_bins_num; bin++)
+        {
             double weight;
             if (fft_bins[bin] < centre_frequencies[filter_idx - 1])
                 weight = 0;
@@ -52,12 +54,28 @@ void MFCC::initialize_filterbank(void)
 
 void MFCC::initialize_hamming_window(void)
 {
-    
+    hamming.assign(constants::window_size, 0);
+    for (int i = 0; i < constants::window_size; i++)
+        hamming[i] = 0.54 - 0.46 * cos(2 * PI * i / (constants::window_size - 1));
 }
 
 void MFCC::initialize_dct_matrix(void)
 {
-    
+    double_vector v1(constants::mfcc_features_num + 1, 0), v2(constants::mel_banks_num, 0);
+    for (int i = 0; i <= constants::mfcc_features_num; i++)
+        v1[i] = i;
+    for (int i = 0; i < constants::mel_banks_num; i++)
+        v2[i] = i + 0.5;
+
+    dct.reserve (constants::mel_banks_num * (constants::mfcc_features_num + 1));        
+    double c = sqrt(2.0 / constants::mel_banks_num);
+    for (int i = 0; i <= constants::mfcc_features_num; i++)
+    {
+        double_vector single_feature;
+        for (int j = 0; j < constants::mel_banks_num; j++)
+            single_feature.push_back (c * cos(PI / constants::mel_banks_num * v1[i] * v2[j]));
+        dct.push_back(single_feature);
+    }
 }
 
 void MFCC::initialize_twiddle(void)
@@ -66,9 +84,7 @@ void MFCC::initialize_twiddle(void)
     for (int n = 2; n <= constants::fft_size; n *= 2)
     {
         for (int k = 0; k <= n / 2 - 1; k++)
-        {
             twiddle[n][k] = exp(-2 * PI * k / n * j);
-        }
     }
 }
 
