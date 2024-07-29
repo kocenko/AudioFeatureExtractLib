@@ -98,6 +98,43 @@ void MFCC::windowing_and_preemphasis(void)
     frame = processed_frame;
 }
 
+complex_matrix MFCC::fft(complex_matrix signal)
+{
+    int N = signal.size();
+    if (N == 1)
+        return signal;
+
+    complex_matrix even_samples(N / 2, 0), odd_samples(N / 2, 0), Xjo, Xjo2;
+
+    for (int i = 0; i < N; i += 2)
+        even_samples[i / 2] = signal[i];
+    for (int i = 1; i < N; i += 2)
+        odd_samples[(i - 1) / 2] = signal[i];
+
+    // Compute N/2-point FFT
+    Xjo = fft(even_samples);
+    Xjo2 = fft(odd_samples);
+    Xjo.insert (Xjo.end(), Xjo2.begin(), Xjo2.end());
+
+    // Butterfly computations
+    for (int i = 0; i <= N / 2 - 1; i++) {
+        complex_vector t = Xjo[i], tw = twiddle[N][i];
+        Xjo[i] = t + tw * Xjo[i + N / 2];
+        Xjo[i + N / 2] = t - tw * Xjo[i + N / 2];
+    }
+    return Xjo;
+}
+
+void MFCC::compute_power_spectrum(void)
+{
+    frame.resize(constants::fft_size);  // zero-padding
+    complex_matrix complex_frame(frame.begin(), frame.end());
+    complex_matrix complex_fft = fft(complex_frame);
+
+    for (int i = 0; i < constants::fft_size / 2 + 1; i++)
+        power_spectrum[i] = pow(abs(complex_fft[i]), 2);
+}
+
 MFCC::MFCC()
 {
     initialize_filterbank();
