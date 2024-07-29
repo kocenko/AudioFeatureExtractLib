@@ -77,6 +77,13 @@ namespace constants
      * Defines the number of points used in the FFT computation.
      */
     constexpr short fft_size = 512;
+
+    /**
+     * @brief The pre-emphasis coefficient for the audio signal.
+     * 
+     * Defines the coefficient used in the pre-emphasis filter applied to the audio signal.
+     */
+    constexpr float pre_emphasis_coefficient = 0.97;
 }
 
 #endif //CONFIG_H

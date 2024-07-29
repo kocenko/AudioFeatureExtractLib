@@ -32,6 +32,7 @@ private:
     void initialize_hamming_window(void);
     void initialize_dct_matrix(void);
     void initialize_twiddle(void);
+    void windowing_and_preemphasis(void);
 public:
     MFCC();
 };

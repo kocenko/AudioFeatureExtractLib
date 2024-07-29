@@ -3,12 +3,14 @@
 #include <iostream>
 
 
-MFCC::MFCC()
+double MFCC::herz_to_mel(double frequency_in_herz)
 {
-    initialize_filterbank();
-    initialize_hamming_window();
-    initialize_dct_matrix();
-    initialize_twiddle();
+    return 2595 * std::log10(1 + frequency_in_herz / 700);
+}
+
+double MFCC::mel_to_herz (double frequency_in_mel)
+{
+    return 700 * (std::pow(10, frequency_in_mel / 2595) - 1);
 }
 
 void MFCC::initialize_filterbank(void)
@@ -88,12 +90,18 @@ void MFCC::initialize_twiddle(void)
     }
 }
 
-double MFCC::herz_to_mel(double frequency_in_herz)
+void MFCC::windowing_and_preemphasis(void)
 {
-    return 2595 * std::log10(1 + frequency_in_herz / 700);
+    double_vector processed_frame(frame.size(), hamming[0] * frame[0]);
+    for (int i = 0; i < frame.size(); i++)
+        processed_frame[i] = hamming[i] * (frame[i] - constants::pre_emphasis_coefficient * frame[i - 1]);
+    frame = processed_frame;
 }
 
-double MFCC::mel_to_herz (double frequency_in_mel)
+MFCC::MFCC()
 {
-    return 700 * (std::pow(10, frequency_in_mel / 2595) - 1);
+    initialize_filterbank();
+    initialize_hamming_window();
+    initialize_dct_matrix();
+    initialize_twiddle();
 }
