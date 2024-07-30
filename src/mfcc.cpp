@@ -162,8 +162,27 @@ void MFCC::compute_dct(void)
 
 MFCC::MFCC()
 {
+    power_spectrum.assign(constants::fft_size / 2 + 1, 0);
     initialize_filterbank();
     initialize_hamming_window();
     initialize_dct_matrix();
     initialize_twiddle();
+}
+
+double_matrix MFCC::process_audio_segment(double_vector samples)
+{
+    double_matrix mfcc_frames;
+
+    // If the signal is not divisible by the interval, the end is discarted
+    for (int i = 0; i < samples.size(); i += constants::interval_size)
+    {
+        frame.assign(samples.begin() + i, samples.begin() + i + constants::window_size);
+        windowing_and_preemphasis();
+        compute_power_spectrum();
+        compute_log_mel_filterbank();
+        compute_dct();
+        mfcc_frames.push_back(mfcc);
+    }
+
+    return mfcc_frames;
 }

@@ -39,7 +39,7 @@ private:
     void compute_dct(void);
 public:
     MFCC();
-
+    double_matrix process_audio_segment(double_vector samples);
 };
 
 #endif //MFCC_H

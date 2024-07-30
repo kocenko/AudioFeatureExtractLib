@@ -39,13 +39,12 @@ namespace constants
     constexpr short window_size = 400;
 
     /**
-     * @brief The duration of the overlap between frames expressed in number of frames.
+     * @brief The duration between the start of each frame expressed in number of frames.
      * 
-     * Defines the length of the overlap between frames.
-     * With the given sampling rate (16kHz) it is equivalent to 15ms resulting in 60% of overlap.
-     * By applying this overlap we achieve 100 frames per second. 
+     * With the given sampling rate (16kHz) it is equivalent to 10ms resulting in 60% of overlap.
+     * By applying this interval we achieve 100 frames per second. 
      */
-    constexpr short overlap_size = 240;
+    constexpr short interval_size = 160;
 
     /**
      * @brief The number of Mel filter banks.
