@@ -23,7 +23,7 @@ class MFCC
 {
 private:
     twiddle_map twiddle;
-    double_vector frame, hamming, mfcc, power_spectrum;
+    double_vector frame, hamming, mfcc, power_spectrum, log_mel_coefficients;
     double_matrix filter_banks, dct;
 
     inline double herz_to_mel (double frequency_in_herz);
@@ -35,6 +35,8 @@ private:
     void windowing_and_preemphasis(void);
     complex_matrix fft(complex_matrix signal);
     void compute_power_spectrum(void);
+    void compute_log_mel_filterbank(void);
+    void compute_dct(void);
 public:
     MFCC();
 

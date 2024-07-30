@@ -135,6 +135,31 @@ void MFCC::compute_power_spectrum(void)
         power_spectrum[i] = pow(abs(complex_fft[i]), 2);
 }
 
+void MFCC::compute_log_mel_filterbank(void)
+{
+    log_mel_coefficients.assign(constants::mel_banks_num, 0);
+        
+    for (int i = 0; i < constants::mel_banks_num; i++)
+    {
+        for (int j = 0; j < filter_banks[i].size(); j++)
+            log_mel_coefficients[i] += filter_banks[i][j] * power_spectrum[j];
+        if (log_mel_coefficients[i] < 1.0)
+            log_mel_coefficients[i] = 1.0;
+    }
+    
+    for (int i = 0; i < constants::mel_banks_num; i++)
+        log_mel_coefficients[i] = std::log(log_mel_coefficients[i]);
+}
+
+void MFCC::compute_dct(void)
+{
+    mfcc.assign(constants::mfcc_features_num + 1, 0);
+    for (int i = 0; i <= constants::mfcc_features_num; i++) {
+        for (int j = 0; j < constants::mel_banks_num; j++)
+            mfcc[i] += dct[i][j] * log_mel_coefficients[j];
+    }
+}
+
 MFCC::MFCC()
 {
     initialize_filterbank();
