@@ -1,6 +1,5 @@
 #include "mfcc.h"
 #include "config.h"
-#include <iostream>
 
 
 double MFCC::herz_to_mel(double frequency_in_herz)
@@ -22,7 +21,7 @@ void MFCC::initialize_filterbank(void)
     centre_frequencies.reserve(constants::mel_banks_num + 2);
     for (int i = 0; i < constants::mel_banks_num + 2; i++)
     {
-        double ith_center = mel_to_herz(constants::min_frequency + (constants::min_frequency - constants::min_frequency) / (constants::mel_banks_num + 1) * i);
+        double ith_center = mel_to_herz(min_mel_frequency + (max_mel_frequency - min_mel_frequency) / (constants::mel_banks_num + 1) * i);
         centre_frequencies.push_back(ith_center);
     }
 
