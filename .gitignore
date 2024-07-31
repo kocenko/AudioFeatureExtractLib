@@ -34,3 +34,6 @@
 # IDE config
 .idea
 .vscode
+
+# Build folder
+build/
