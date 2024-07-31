@@ -1,5 +1,6 @@
 #include "mfcc.h"
 #include "config.h"
+#include <iostream>
 
 
 double MFCC::herz_to_mel(double frequency_in_herz)
@@ -62,15 +63,15 @@ void MFCC::initialize_hamming_window(void)
 
 void MFCC::initialize_dct_matrix(void)
 {
-    double_vector v1(constants::mfcc_features_num + 1, 0), v2(constants::mel_banks_num, 0);
-    for (int i = 0; i <= constants::mfcc_features_num; i++)
+    double_vector v1(constants::mfcc_features_num, 0), v2(constants::mel_banks_num, 0);
+    for (int i = 0; i < constants::mfcc_features_num; i++)
         v1[i] = i;
     for (int i = 0; i < constants::mel_banks_num; i++)
         v2[i] = i + 0.5;
 
-    dct.reserve (constants::mel_banks_num * (constants::mfcc_features_num + 1));        
+    dct.reserve (constants::mel_banks_num * (constants::mfcc_features_num));        
     double c = sqrt(2.0 / constants::mel_banks_num);
-    for (int i = 0; i <= constants::mfcc_features_num; i++)
+    for (int i = 0; i < constants::mfcc_features_num; i++)
     {
         double_vector single_feature;
         for (int j = 0; j < constants::mel_banks_num; j++)
@@ -142,8 +143,6 @@ void MFCC::compute_log_mel_filterbank(void)
     {
         for (int j = 0; j < filter_banks[i].size(); j++)
             log_mel_coefficients[i] += filter_banks[i][j] * power_spectrum[j];
-        if (log_mel_coefficients[i] < 1.0)
-            log_mel_coefficients[i] = 1.0;
     }
     
     for (int i = 0; i < constants::mel_banks_num; i++)
@@ -152,8 +151,8 @@ void MFCC::compute_log_mel_filterbank(void)
 
 void MFCC::compute_dct(void)
 {
-    mfcc.assign(constants::mfcc_features_num + 1, 0);
-    for (int i = 0; i <= constants::mfcc_features_num; i++) {
+    mfcc.assign(constants::mfcc_features_num, 0);
+    for (int i = 0; i < constants::mfcc_features_num; i++) {
         for (int j = 0; j < constants::mel_banks_num; j++)
             mfcc[i] += dct[i][j] * log_mel_coefficients[j];
     }
@@ -173,7 +172,7 @@ double_matrix MFCC::process_audio_segment(double_vector samples)
     double_matrix mfcc_frames;
 
     // If the signal is not divisible by the interval, the end is discarted
-    for (int i = 0; i < samples.size(); i += constants::interval_size)
+    for (int i = 0; i < samples.size() - constants::window_size; i += constants::interval_size)
     {
         frame.assign(samples.begin() + i, samples.begin() + i + constants::window_size);
         windowing_and_preemphasis();

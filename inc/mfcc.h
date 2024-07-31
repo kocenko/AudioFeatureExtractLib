@@ -42,10 +42,6 @@ typedef std::map<int, std::map<int, complex_vector>> twiddle_map;
 class MFCC
 {
 private:
-    twiddle_map twiddle;
-    double_vector frame, hamming, mfcc, power_spectrum, log_mel_coefficients;
-    double_matrix filter_banks, dct;
-
     /**
      * @brief Convert frequency from Hertz to Mel scale.
      * 
@@ -110,6 +106,9 @@ private:
      */
     void compute_dct(void);
 public:
+    twiddle_map twiddle;
+    double_vector frame, hamming, mfcc, power_spectrum, log_mel_coefficients;
+    double_matrix filter_banks, dct;
     /**
      * @brief Construct a new MFCC object.
      */
