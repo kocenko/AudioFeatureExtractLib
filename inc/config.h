@@ -59,7 +59,7 @@ namespace constants
      * Defines the lower bound of the frequency range for the Mel filter banks.
      * The frequencies below this value will not be considered in the Mel filter bank calculation.
      */
-    constexpr short min_frequency = 50;
+    constexpr short min_frequency = 0;
 
     /**
      * @brief The maximum frequency to be considered in the Mel filter banks.

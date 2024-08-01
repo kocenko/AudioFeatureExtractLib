@@ -1,6 +1,7 @@
 #include "mfcc.h"
 #include "config.h"
 #include <iostream>
+#include <algorithm>
 
 
 double MFCC::herz_to_mel(double frequency_in_herz)
@@ -90,6 +91,15 @@ void MFCC::initialize_twiddle(void)
     }
 }
 
+void MFCC::rescale_signal(double_vector& signal)
+{
+    double min_value = *std::min_element(signal.begin(), signal.end());
+    double max_value = *std::max_element(signal.begin(), signal.end());
+
+    for (double& value: signal)
+        value = 2 * (value - min_value) / (max_value - min_value) - 1;
+}
+
 void MFCC::windowing_and_preemphasis(void)
 {
     double_vector processed_frame(frame.size(), hamming[0] * frame[0]);
@@ -143,6 +153,9 @@ void MFCC::compute_log_mel_filterbank(void)
     {
         for (int j = 0; j < filter_banks[i].size(); j++)
             log_mel_coefficients[i] += filter_banks[i][j] * power_spectrum[j];
+
+        if (log_mel_coefficients[i] < 1.0)
+            log_mel_coefficients[i] = 1.0;
     }
     
     for (int i = 0; i < constants::mel_banks_num; i++)
@@ -170,6 +183,7 @@ MFCC::MFCC()
 double_matrix MFCC::process_audio_segment(double_vector samples)
 {
     double_matrix mfcc_frames;
+    rescale_signal(samples);
 
     // If the signal is not divisible by the interval, the end is discarted
     for (int i = 0; i < samples.size() - constants::window_size; i += constants::interval_size)

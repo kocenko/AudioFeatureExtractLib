@@ -79,6 +79,13 @@ private:
     void initialize_twiddle(void);
     
     /**
+     * @brief Rescale signal samples to cover values from between -1.0 and 1.0.
+     * 
+     * @param signal The vector of doubles representing the signal
+     */
+    void rescale_signal(double_vector& signal);
+
+    /**
      * @brief Apply windowing and pre-emphasis to the audio frame.
      */
     void windowing_and_preemphasis(void);
