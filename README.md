@@ -35,3 +35,6 @@ When the package is installed you can use the following commands to compile the 
 4. Compile the package: `cmake --build . --config Release`
 
 After that the python package should appear in the folder `build\Release\` with the appropriate `.pyd` extension, e.g. `build\Release\mfcc.cp311-win_amd64.pyd`.
+
+### Working with C#
+
