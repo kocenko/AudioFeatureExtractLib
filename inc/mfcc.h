@@ -114,7 +114,7 @@ private:
     void compute_dct(void);
 public:
     twiddle_map twiddle;
-    double_vector frame, hamming, mfcc, power_spectrum, log_mel_coefficients;
+    double_vector frame, hamming, mfcc, power_spectrum, log_mel_coefficients, mfcc_output;
     double_matrix filter_banks, dct;
     /**
      * @brief Construct a new MFCC object.
@@ -127,7 +127,7 @@ public:
      * @param samples The audio samples of the segment.
      * @return Matrix of MFCC features.
      */
-    double_matrix process_audio_segment(double_vector samples);
+    void process_audio_segment(double_vector samples);
 };
 
 #endif //MFCC_H

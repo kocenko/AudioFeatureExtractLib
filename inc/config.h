@@ -17,6 +17,11 @@
 namespace constants
 {
     /**
+     * @brief The expected number of samples of the recording.
+     */
+    constexpr short recording_samples = 16000;
+
+    /**
      * @brief The sampling rate of the audio signal in Hz.
      * 
      * Defines the number of samples per second taken from the signal.
@@ -41,10 +46,10 @@ namespace constants
     /**
      * @brief The duration between the start of each frame expressed in number of frames.
      * 
-     * With the given sampling rate (16kHz) it is equivalent to 10ms resulting in 60% of overlap.
+     * With the given sampling rate (16kHz) it is around 10ms resulting in 60% of overlap.
      * By applying this interval we achieve 100 frames per second. 
      */
-    constexpr short interval_size = 160;
+    constexpr short interval_size = 156;
 
     /**
      * @brief The number of Mel filter banks.

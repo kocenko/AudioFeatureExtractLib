@@ -4,7 +4,7 @@
 
 namespace py = pybind11;
 
-PYBIND11_MODULE(mfcc, m) {
+PYBIND11_MODULE(mfcc_python, m) {
     py::class_<MFCC>(m, "MFCC")
         .def(py::init<>())
         .def("process_audio_segment", &MFCC::process_audio_segment)
@@ -15,5 +15,6 @@ PYBIND11_MODULE(mfcc, m) {
         .def_readwrite("power_spectrum", &MFCC::power_spectrum)
         .def_readwrite("log_mel_coefficients", &MFCC::log_mel_coefficients)
         .def_readwrite("filter_banks", &MFCC::filter_banks)
-        .def_readwrite("dct", &MFCC::dct);
+        .def_readwrite("dct", &MFCC::dct)
+        .def_readwrite("mfcc_output", &MFCC::mfcc_output);
 }

@@ -180,11 +180,11 @@ MFCC::MFCC()
     initialize_twiddle();
 }
 
-double_matrix MFCC::process_audio_segment(double_vector samples)
+void MFCC::process_audio_segment(double_vector samples)
 {
-    double_matrix mfcc_frames;
+    mfcc_output.clear();
     rescale_signal(samples);
-
+    
     // If the signal is not divisible by the interval, the end is discarted
     for (int i = 0; i < samples.size() - constants::window_size; i += constants::interval_size)
     {
@@ -193,8 +193,6 @@ double_matrix MFCC::process_audio_segment(double_vector samples)
         compute_power_spectrum();
         compute_log_mel_filterbank();
         compute_dct();
-        mfcc_frames.push_back(mfcc);
+        mfcc_output.insert(mfcc_output.end(), mfcc.begin(), mfcc.end());
     }
-
-    return mfcc_frames;
 }
