@@ -96,6 +96,11 @@ void MFCC::rescale_signal(double_vector& signal)
     double min_value = *std::min_element(signal.begin(), signal.end());
     double max_value = *std::max_element(signal.begin(), signal.end());
 
+    if (min_value == max_value) {
+        std::fill(signal.begin(), signal.end(), 0.0);
+        return;
+    }
+
     for (double& value: signal)
         value = 2 * (value - min_value) / (max_value - min_value) - 1;
 }
@@ -182,10 +187,13 @@ MFCC::MFCC()
 
 void MFCC::process_audio_segment(double_vector samples)
 {
-    mfcc_output.clear();
+    if ((constants::recording_samples - constants::window_size) % constants::interval_size > 0)
+        throw std::runtime_error("Number of samples in recording should result in exactly 100 frames per second, according to: (samples - window_size) / interval_size.");
+
+    int frames_num = (constants::recording_samples - constants::window_size) / constants::interval_size;    
+    mfcc_output.assign(frames_num * constants::mfcc_features_num, 0);
     rescale_signal(samples);
-    
-    // If the signal is not divisible by the interval, the end is discarted
+
     for (int i = 0; i < samples.size() - constants::window_size; i += constants::interval_size)
     {
         frame.assign(samples.begin() + i, samples.begin() + i + constants::window_size);
@@ -193,6 +201,6 @@ void MFCC::process_audio_segment(double_vector samples)
         compute_power_spectrum();
         compute_log_mel_filterbank();
         compute_dct();
-        mfcc_output.insert(mfcc_output.end(), mfcc.begin(), mfcc.end());
+        std::copy(mfcc.begin(), mfcc.end(), mfcc_output.begin() + (i / constants::interval_size) * constants::mfcc_features_num);
     }
 }

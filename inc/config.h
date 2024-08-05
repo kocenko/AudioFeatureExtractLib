@@ -87,7 +87,7 @@ namespace constants
      * 
      * Defines the coefficient used in the pre-emphasis filter applied to the audio signal.
      */
-    constexpr float pre_emphasis_coefficient = 0.97;
+    constexpr double pre_emphasis_coefficient = 0.97;
 }
 
 #endif //CONFIG_H
