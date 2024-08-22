@@ -33,7 +33,7 @@ namespace constants
      * 
      * Defines the number of MFCC features to be extracted from the audio signal.
      */
-    constexpr short mfcc_features_num = 13;
+    constexpr short mfcc_features_num = 39;
 
     /**
      * @brief The duration of the analysis window in number of frames.

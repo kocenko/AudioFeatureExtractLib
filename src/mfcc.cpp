@@ -64,15 +64,15 @@ void MFCC::initialize_hamming_window(void)
 
 void MFCC::initialize_dct_matrix(void)
 {
-    double_vector v1(constants::mfcc_features_num, 0), v2(constants::mel_banks_num, 0);
-    for (int i = 0; i < constants::mfcc_features_num; i++)
+    double_vector v1(constants::mfcc_features_num + 1, 0), v2(constants::mel_banks_num, 0);
+    for (int i = 0; i < constants::mfcc_features_num + 1; i++)
         v1[i] = i;
     for (int i = 0; i < constants::mel_banks_num; i++)
         v2[i] = i + 0.5;
 
-    dct.reserve (constants::mel_banks_num * (constants::mfcc_features_num));        
+    dct.reserve (constants::mel_banks_num * (constants::mfcc_features_num + 1));        
     double c = sqrt(2.0 / constants::mel_banks_num);
-    for (int i = 0; i < constants::mfcc_features_num; i++)
+    for (int i = 0; i < constants::mfcc_features_num + 1; i++)
     {
         double_vector single_feature;
         for (int j = 0; j < constants::mel_banks_num; j++)
@@ -169,8 +169,8 @@ void MFCC::compute_log_mel_filterbank(void)
 
 void MFCC::compute_dct(void)
 {
-    mfcc.assign(constants::mfcc_features_num, 0);
-    for (int i = 0; i < constants::mfcc_features_num; i++) {
+    mfcc.assign(constants::mfcc_features_num + 1, 0);
+    for (int i = 0; i < constants::mfcc_features_num + 1; i++) {
         for (int j = 0; j < constants::mel_banks_num; j++)
             mfcc[i] += dct[i][j] * log_mel_coefficients[j];
     }
@@ -201,6 +201,6 @@ void MFCC::process_audio_segment(double_vector samples)
         compute_power_spectrum();
         compute_log_mel_filterbank();
         compute_dct();
-        std::copy(mfcc.begin(), mfcc.end(), mfcc_output.begin() + (i / constants::interval_size) * constants::mfcc_features_num);
+        std::copy(mfcc.begin() + 1, mfcc.end(), mfcc_output.begin() + (i / constants::interval_size) * constants::mfcc_features_num);
     }
 }
