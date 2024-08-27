@@ -79,11 +79,11 @@ private:
     void initialize_twiddle(void);
     
     /**
-     * @brief Rescale signal samples to cover values from between -1.0 and 1.0.
+     * @brief Normalize the signal.
      * 
      * @param signal The vector of doubles representing the signal
      */
-    void rescale_signal(double_vector& signal);
+    void normalize_signal(double_vector& signal);
 
     /**
      * @brief Apply windowing and pre-emphasis to the audio frame.
@@ -114,7 +114,7 @@ private:
     void compute_dct(void);
 public:
     twiddle_map twiddle;
-    double_vector frame, hamming, mfcc, power_spectrum, log_mel_coefficients, mfcc_output;
+    double_vector frame, hamming, mfcc, power_spectrum, log_mel_coefficients, mfcc_output, mel_spectrogram_output;
     double_matrix filter_banks, dct;
     /**
      * @brief Construct a new MFCC object.

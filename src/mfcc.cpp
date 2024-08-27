@@ -1,6 +1,7 @@
 #include "mfcc.h"
 #include "config.h"
 #include <iostream>
+#include <numeric>
 #include <algorithm>
 
 
@@ -91,7 +92,7 @@ void MFCC::initialize_twiddle(void)
     }
 }
 
-void MFCC::rescale_signal(double_vector& signal)
+void MFCC::normalize_signal(double_vector& signal)
 {
     double min_value = *std::min_element(signal.begin(), signal.end());
     double max_value = *std::max_element(signal.begin(), signal.end());
@@ -159,8 +160,10 @@ void MFCC::compute_log_mel_filterbank(void)
         for (int j = 0; j < filter_banks[i].size(); j++)
             log_mel_coefficients[i] += filter_banks[i][j] * power_spectrum[j];
 
-        if (log_mel_coefficients[i] < 1.0)
-            log_mel_coefficients[i] = 1.0;
+        // Not using clipping/trimming to preserve relation within the data.
+        // Physical interpretation of those coefficients is not necessary.
+        // if (log_mel_coefficients[i] < 1.0)
+        //     log_mel_coefficients[i] = 1.0;
     }
     
     for (int i = 0; i < constants::mel_banks_num; i++)
@@ -191,8 +194,11 @@ void MFCC::process_audio_segment(double_vector samples)
         throw std::runtime_error("Number of samples in recording should result in exactly 100 frames per second, according to: (samples - window_size) / interval_size.");
 
     int frames_num = (constants::recording_samples - constants::window_size) / constants::interval_size;    
+    mel_spectrogram_output.assign(frames_num * constants::mel_banks_num, 0);
     mfcc_output.assign(frames_num * constants::mfcc_features_num, 0);
-    rescale_signal(samples);
+
+    // Signal preprocessing
+    normalize_signal(samples);
 
     for (int i = 0; i < samples.size() - constants::window_size; i += constants::interval_size)
     {
@@ -201,6 +207,8 @@ void MFCC::process_audio_segment(double_vector samples)
         compute_power_spectrum();
         compute_log_mel_filterbank();
         compute_dct();
+
         std::copy(mfcc.begin() + 1, mfcc.end(), mfcc_output.begin() + (i / constants::interval_size) * constants::mfcc_features_num);
+        std::copy(log_mel_coefficients.begin(), log_mel_coefficients.end(), mel_spectrogram_output.begin() + (i / constants::interval_size) * constants::mel_banks_num);
     }
 }

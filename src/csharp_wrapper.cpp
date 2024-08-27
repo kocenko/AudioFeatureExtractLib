@@ -17,5 +17,5 @@ double* mfcc_process_audio_segment(MFCC* mfcc, double* signal, int signal_length
 {
     std::vector<double> signal_vector(signal, signal + signal_length);
     mfcc->process_audio_segment(signal_vector);
-    return mfcc->mfcc_output.data();
+    return mfcc->mel_spectrogram_output.data();
 }

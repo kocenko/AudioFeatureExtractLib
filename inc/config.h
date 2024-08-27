@@ -46,10 +46,9 @@ namespace constants
     /**
      * @brief The duration between the start of each frame expressed in number of frames.
      * 
-     * With the given sampling rate (16kHz) it is around 10ms resulting in 60% of overlap.
-     * By applying this interval we achieve 100 frames per second. 
+     * With the given sampling rate (16kHz) we achieve 50 frames per second. 
      */
-    constexpr short interval_size = 156;
+    constexpr short interval_size = 312;
 
     /**
      * @brief The number of Mel filter banks.

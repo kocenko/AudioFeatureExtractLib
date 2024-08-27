@@ -15,6 +15,6 @@ PYBIND11_MODULE(mfcc_python, m) {
         .def_readwrite("power_spectrum", &MFCC::power_spectrum)
         .def_readwrite("log_mel_coefficients", &MFCC::log_mel_coefficients)
         .def_readwrite("filter_banks", &MFCC::filter_banks)
-        .def_readwrite("dct", &MFCC::dct)
-        .def_readwrite("mfcc_output", &MFCC::mfcc_output);
+        .def_readwrite("mfcc_output", &MFCC::mfcc_output)
+        .def_readwrite("mel_spectrogram_output", &MFCC::mel_spectrogram_output);
 }
