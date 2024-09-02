@@ -15,7 +15,7 @@ add_library(mfcc_csharp SHARED ${CMAKE_SOURCE_DIR}/src/csharp_wrapper.cpp ${CMAK
 
 # Custom target to move the files
 add_custom_target(post_build ALL
-    COMMAND ${CMAKE_COMMAND} -E copy $<TARGET_FILE:mfcc_python> ${CMAKE_SOURCE_DIR}/../keyword-detection/dataset
+    COMMAND ${CMAKE_COMMAND} -E copy $<TARGET_FILE:mfcc_python> ${CMAKE_SOURCE_DIR}/../keyword-detection/feature_extraction
     COMMAND ${CMAKE_COMMAND} -E copy $<TARGET_FILE:mfcc_csharp> ${CMAKE_SOURCE_DIR}/../unity-gui/Assets/Plugins/Mfcc
     DEPENDS mfcc_python mfcc_csharp
 )
