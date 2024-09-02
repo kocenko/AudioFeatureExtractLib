@@ -55,7 +55,7 @@ namespace constants
      * 
      * Defines the number of Mel filter banks to be used in the MFCC extraction.
      */
-    constexpr short mel_banks_num = 40;
+    constexpr short mel_banks_num = 80;
 
     /**
      * @brief The minimum frequency to be considered in the Mel filter banks.
