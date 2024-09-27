@@ -36,6 +36,8 @@ When the package is installed you can use the following commands to compile the 
 
 After that the python package should appear in the folder `libs/` with the appropriate `.pyd` extension.
 
+IMPORTANT NOTE: The library has to be compiled with the same version of Python as the target program's version.
+
 ### Working with C#
 
 1. Create `build/` folder if it does not exist: `mkdir build`
@@ -44,3 +46,10 @@ After that the python package should appear in the folder `libs/` with the appro
 4. Compile the package: `cmake --build . --config Release`
 
 After that the C library should appear in the folder `libs/` with the appropriate `.dll` extension.
+
+
+### Input handling
+
+Inputs provided to the feature extractor have to match the shape defined in the `inc/config.h` file.
+Providing data with different shape than expected can cause the program using this library to crash.
+For now, the responsibility of delivering inputs with appropriate dimensions is on the side of the program using the library.
