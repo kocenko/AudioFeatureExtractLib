@@ -29,7 +29,7 @@ Notice: The dependencies are placed in `extern/` folder. In CMakeLists.txt it is
 
 When the package is installed you can use the following commands to compile the project:
 
-1. Create `build/` folder if it does not exist: `mkdir build`
+1. Create `build/` and `libs/` folders if they do not exist: `mkdir build`, `mkdir libs`
 2. Go to this folder: `cd build`
 3. Run cmake: `cmake ..`
 4. Compile the package: `cmake --build . --config Release`
@@ -40,7 +40,7 @@ IMPORTANT NOTE: The library has to be compiled with the same version of Python a
 
 ### Working with C#
 
-1. Create `build/` folder if it does not exist: `mkdir build`
+1. Create `build/` and `libs/` folders if they do not exist: `mkdir build`, `mkdir libs`
 2. Go to this folder: `cd build`
 3. Run cmake: `cmake ..`
 4. Compile the package: `cmake --build . --config Release`
